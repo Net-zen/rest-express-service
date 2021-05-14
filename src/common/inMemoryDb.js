@@ -1,6 +1,7 @@
 const DB = {
   users: [],
-  boards: []
+  boards: [],
+  tasks: []
 };
 
 const getAllUsers = async () => [...DB.users];
@@ -69,5 +70,42 @@ const removeBoard = async id => {
   return true;
 };
 
+const getAllTasksByBoard = async boardId =>
+  DB.tasks.filter(task => task.boardId === boardId);
+
+const getTaskById = async id => {
+  const foundTasks = DB.tasks.filter(task => task.id === id);
+  if (foundTasks.length > 1) {
+    throw new Error('Database is corrupted!');
+  }
+  return foundTasks[0] || false;
+};
+
+const createTask = async task => {
+  DB.tasks.push(task);
+  return getTaskById(task.id);
+};
+
+const updateTaskInBoard = async (boardId, id, task) => {
+  const idx = DB.tasks.findIndex(el => el.id === id && el.boardId === boardId);
+  if (idx === -1) {
+    return false;
+  }
+  DB.tasks[idx] = { ...task };
+  return { ...DB.tasks[idx] };
+};
+
+const removeTask = async (boardId, id) => {
+  const idx = DB.tasks.findIndex(
+    task => task.boardId === boardId && task.id === id
+  );
+  if (idx === -1) {
+    return false;
+  }
+  DB.tasks.splice(idx, 1);
+  return true;
+};
+
 module.exports = { getAllUsers, getUser, createUser, updateUser, removeUser,
-                  getAllBoards, getBoard, createBoard, updateBoard, removeBoard };
+                  getAllBoards, getBoard, createBoard, updateBoard, removeBoard,
+                  getAllTasksByBoard, getTaskById, createTask, updateTaskInBoard, removeTask};

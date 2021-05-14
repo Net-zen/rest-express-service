@@ -30,4 +30,9 @@ router.route('/:id').put(async (req, res) => {
     return res.json(board)
 });
 
+router.route('/:id').delete(async (req, res) => {
+  await boardService.remove(req.params.id);
+  res.sendStatus(204);
+});
+
 module.exports = router;
