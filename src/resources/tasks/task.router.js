@@ -7,7 +7,11 @@ router.route('/').get(async (req, res) => {
 });
 
 router.route('/:id').get(async (req, res) => {
-    res.json(await taskService.get(req.params.id));
+    const task = await taskService.get(req.params.id);
+  if (!task) {
+    return res.sendStatus(404)
+  }
+  return res.json(task)
 });
 
 router.route('/').post(async (req, res) => {

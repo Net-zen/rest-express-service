@@ -33,6 +33,10 @@ const removeUser = async id => {
   if (idx === -1) {
     return false;
   }
+  const userTasks = DB.tasks.filter(task => task.userId === id);
+    for (let i = 0; i < userTasks.length; i+= 1) {
+      userTasks[i].userId = null;
+    }
   DB.users.splice(idx, 1);
   return true;
 };
@@ -61,19 +65,10 @@ const updateBoard = async (id, board) => {
   return { ...DB.boards[idx] };
 };
 
-const removeBoard = async id => {
-  const idx = DB.boards.findIndex(board => board.id === id);
-  if (idx === -1) {
-    return false;
-  }
-  DB.boards.splice(idx, 1);
-  return true;
-};
-
 const getAllTasksByBoard = async boardId =>
   DB.tasks.filter(task => task.boardId === boardId);
 
-const getTaskById = async id => {
+const getTask = async id => {
   const foundTasks = DB.tasks.filter(task => task.id === id);
   if (foundTasks.length > 1) {
     throw new Error('Database is corrupted!');
@@ -83,7 +78,7 @@ const getTaskById = async id => {
 
 const createTask = async task => {
   DB.tasks.push(task);
-  return getTaskById(task.id);
+  return getTask(task.id);
 };
 
 const updateTaskInBoard = async (boardId, id, task) => {
@@ -106,6 +101,18 @@ const removeTask = async (boardId, id) => {
   return true;
 };
 
+const removeBoard = async id => {
+  const idx = DB.boards.findIndex(board => board.id === id);
+  if (idx === -1) {
+    return false;
+  }
+  DB.tasks
+    .filter(task => task.boardId === id)
+    .forEach(task => removeTask(id, task.id));
+  DB.boards.splice(idx, 1);
+  return true;
+};
+
 module.exports = { getAllUsers, getUser, createUser, updateUser, removeUser,
                   getAllBoards, getBoard, createBoard, updateBoard, removeBoard,
-                  getAllTasksByBoard, getTaskById, createTask, updateTaskInBoard, removeTask};
+                  getAllTasksByBoard, getTask, createTask, updateTaskInBoard, removeTask};
