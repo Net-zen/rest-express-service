@@ -17,6 +17,6 @@ class Board {
     this.title = title;
     this.columns = columns;
   }
-};
+}
 
 module.exports = Board;
