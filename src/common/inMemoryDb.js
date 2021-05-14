@@ -1,5 +1,6 @@
 const DB = {
-  users: []
+  users: [],
+  boards: []
 };
 
 const getAllUsers = async () => [...DB.users];
@@ -35,4 +36,38 @@ const removeUser = async id => {
   return true;
 };
 
-module.exports = { getAllUsers, getUser, createUser, updateUser, removeUser };
+const getAllBoards = async () => [...DB.boards];
+
+const getBoard = async id => {
+  const foundBoards = DB.boards.filter(board => board.id === id);
+  if (foundBoards.length > 1) {
+    throw new Error('Database is corrupted!');
+  }
+  return foundBoards[0] || false;
+};
+
+const createBoard = async board => {
+  DB.boards.push(board);
+  return getBoard(board.id);
+};
+
+const updateBoard = async (id, board) => {
+  const idx = DB.boards.findIndex(el => el.id === id);
+  if (idx === -1) {
+    return false;
+  }
+  DB.boards[idx] = { ...board };
+  return { ...DB.boards[idx] };
+};
+
+const removeBoard = async id => {
+  const idx = DB.boards.findIndex(board => board.id === id);
+  if (idx === -1) {
+    return false;
+  }
+  DB.boards.splice(idx, 1);
+  return true;
+};
+
+module.exports = { getAllUsers, getUser, createUser, updateUser, removeUser,
+                  getAllBoards, getBoard, createBoard, updateBoard, removeBoard };
