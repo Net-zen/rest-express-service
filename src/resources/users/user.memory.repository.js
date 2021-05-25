@@ -25,7 +25,7 @@ const get = async id => {
 
 /**
  * Add new user to db
- * @param {string} user - user id
+ * @param {Object} user - user id
  * @returns {Promise<Object|false>} - added user or false
  */
 const create = user => createUser(user);
@@ -40,7 +40,7 @@ const update = (id, user) => updateUser(id, user);
 
 /**
  * Removes user from db
- * @param {string} id - removable use id
+ * @param {string} id - removable user id
  * @returns {Promise<boolean>} - true if user removed or false
  */
 const remove =  id => removeUser(id);
