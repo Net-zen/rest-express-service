@@ -56,7 +56,7 @@ const update = async (boardId, id, task) => {
 /**
  * Removes task from db
  * @param {string} boardId - board id where tasks bound to
- * @param {string} id - removable use id
+ * @param {string} id - removable task id
  * @returns {Promise<boolean>} - true if task removed or false
  */
 const remove = async (boardId, id) => {
