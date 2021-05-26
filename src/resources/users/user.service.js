@@ -1,6 +1,6 @@
 /**
  * Module user.service
- * This module requires module inMemoryDb
+ * This module requires module user.memory.repository
  * @requires module:./user.memory.repository
  * @module userService
  */
