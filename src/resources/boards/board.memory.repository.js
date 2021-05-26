@@ -1,5 +1,7 @@
 /**
  * Module board.memory.repository
+ * This module requires module inMemoryDb
+ * @requires module:../../common/inMemoryDb
  * @module boardMemoryRepository
  */
 const { getAllBoards, getBoard, createBoard, updateBoard, removeBoard } = require('../../common/inMemoryDb')

@@ -1,5 +1,7 @@
 /**
  * Module task.memory.repository
+ * This module requires module inMemoryDb
+ * @requires module:../../common/inMemoryDb
  * @module taskMemoryRepository
  */
 const { getAllTasksByBoard, getTask, createTask, updateTaskInBoard, removeTask } = require('../../common/inMemoryDb');
