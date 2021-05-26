@@ -58,7 +58,7 @@ const updateUser = async (id, user) => {
 };
 
 /**
- * Removes user by id from db
+ * Removes user by id from db. Unassign all tasks assigned to board.
  * @param {string} id - id of removable user
  * @returns {Promise.<boolean>} - true if user successfully removed or false
  */
@@ -185,7 +185,7 @@ const removeTask = async (boardId, id) => {
 };
 
 /**
- * Removes board by id from db.
+ * Removes board by id from db. Also removes all tasks bound to board
  * @param {string} id - board id
  * @returns {Promise.<boolean>} - true if board successfully removed or false
  */

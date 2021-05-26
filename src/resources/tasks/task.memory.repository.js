@@ -7,7 +7,7 @@ const { getAllTasksByBoard, getTask, createTask, updateTaskInBoard, removeTask }
 /**
  * Get all tasks by board id from db
  * @param {string} boardId - board id where tasks bound to
- * @returns {Promise<boolean|Object[]>} - return all tasks bound to board or false
+ * @returns {Promise.<boolean|Object[]>} - return all tasks bound to board or false
  */
 const getAll = async boardId => {
   const tasks = await getAllTasksByBoard(boardId);
@@ -34,7 +34,7 @@ const get = async id => {
 /**
  * Add new task to db
  * @param {Object} task - task id
- * @returns {Promise<Object|false>} - added task or false
+ * @returns {Promise.<Object|false>} - added task or false
  */
 const create = task => createTask(task);
 
@@ -43,7 +43,7 @@ const create = task => createTask(task);
  * @param {string} boardId -  board id where tasks bound to
  * @param {string} id - updatable task id
  * @param {Object} task - new task data for update
- * @returns {Promise<Object|false>} updated task or false
+ * @returns {Promise.<Object|false>} updated task or false
  */
 const update = async (boardId, id, task) => {
   const updatedTask = await updateTaskInBoard(boardId, id, task);
@@ -57,7 +57,7 @@ const update = async (boardId, id, task) => {
  * Removes task from db
  * @param {string} boardId - board id where tasks bound to
  * @param {string} id - removable task id
- * @returns {Promise<boolean>} - true if task removed or false
+ * @returns {Promise.<boolean>} - true if task removed or false
  */
 const remove = async (boardId, id) => {
   const task = await removeTask(boardId, id);
