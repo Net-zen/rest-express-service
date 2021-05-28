@@ -1,4 +1,5 @@
 import express from 'express';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import taskService from  './task.service';
 import Task from  './task.model';
 
@@ -20,7 +21,7 @@ router.route('/:id').get(async (req, res) => {
     const task = await taskService.get(req.params.id);
     return res.json(task);
   } catch (e) {
-    return res.status(404).json(e.message);
+    return res.status(StatusCodes.NOT_FOUND).json(e.message);
   }
 });
 
@@ -28,9 +29,9 @@ router.route('/').post(async (req:express.Request<IRequestParams>, res) => {
   try {
     const task = await taskService.create(
       new Task({ ...req.body, boardId: req.params.boardId }));
-    return res.status(201).json(task);
+    return res.status(StatusCodes.CREATED).json(task);
   } catch (e) {
-    return res.status(400).json(e.message);
+    return res.status(StatusCodes.BAD_REQUEST).json(e.message);
   }
 });
 
@@ -43,14 +44,16 @@ router.route('/:id').put(async (req:express.Request<IRequestParamsId>, res) => {
     );
     return res.json(task)
   } catch (e) {
-    return res.status(400).json(e.message);
+    return res.status(StatusCodes.BAD_REQUEST).json(e.message);
   }
 });
 
 router.route('/:id').delete(async (req:express.Request<IRequestParamsId>, res) => {
   const removeSuccess = await taskService.remove(req.params.boardId, req.params.id);
-  if (removeSuccess) return  res.sendStatus(204);
-  return res.status(404);
+  if (removeSuccess) {
+    return  res.status(StatusCodes.NO_CONTENT).json(ReasonPhrases.NO_CONTENT);
+  }
+  return res.status(StatusCodes.NOT_FOUND).json(ReasonPhrases.NOT_FOUND);
 });
 
 export default router;

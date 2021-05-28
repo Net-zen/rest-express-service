@@ -34,7 +34,6 @@ const updateUser = async (id:string, user:IUser):Promise<IUser | boolean> => {
     return false;
   }
   DB.users[idx] = { ...user };
-  if (!DB.users[idx]) return false
   DB.users[idx]!.id = id;
   return { ...DB.users[idx]! };
 };

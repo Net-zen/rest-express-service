@@ -1,4 +1,5 @@
 import express from 'express';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import User from './user.model';
 import usersService from './user.service';
 
@@ -14,7 +15,7 @@ router.route('/:id').get(async (req, res) => {
     const user = await usersService.get(req.params.id);
     return res.json(User.toResponse(user));
   } catch (e) {
-    return res.status(404).json(e.message);
+    return res.status(StatusCodes.NOT_FOUND).json(e.message);
   }
 });
 
@@ -22,9 +23,9 @@ router.route('/').post(async (req, res) => {
   try {
     const user = await usersService.create(
       new User({ ...req.body }));
-    return res.status(201).json(User.toResponse(user));
+    return res.status(StatusCodes.CREATED).json(User.toResponse(user));
   } catch (e) {
-    return res.status(400).json(e.message);
+    return res.status(StatusCodes.BAD_REQUEST).json(e.message);
   }
 });
 
@@ -33,14 +34,16 @@ router.route('/:id').put( async (req, res) => {
     const user = await usersService.update(req.params.id, { ...req.body });
     return res.json(User.toResponse(user));
   } catch (e) {
-    return res.status(400).json(e.message);
+    return res.status(StatusCodes.BAD_REQUEST).json(e.message);
   }
 });
 
 router.route('/:id').delete(async (req, res) => {
   const removeSuccess = await usersService.remove(req.params.id);
-  if (removeSuccess) return  res.sendStatus(204);
-  return res.status(404);
+  if (removeSuccess) {
+    return  res.status(StatusCodes.NO_CONTENT).json(ReasonPhrases.NO_CONTENT);
+  }
+  return res.status(StatusCodes.NOT_FOUND).json(ReasonPhrases.NOT_FOUND);
 });
 
 export default router;
