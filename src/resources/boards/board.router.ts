@@ -36,8 +36,9 @@ router.route('/:id').put(async (req, res) => {
 });
 
 router.route('/:id').delete(async (req, res) => {
-  await boardService.remove(req.params.id);
-  res.sendStatus(204);
+  const removeSuccess = await boardService.remove(req.params.id);
+  if (removeSuccess) return  res.sendStatus(204);
+  return res.status(404);
 });
 
 export default router;

@@ -48,8 +48,9 @@ router.route('/:id').put(async (req:express.Request<IRequestParamsId>, res) => {
 });
 
 router.route('/:id').delete(async (req:express.Request<IRequestParamsId>, res) => {
-  await taskService.remove(req.params.boardId, req.params.id);
-  res.sendStatus(204);
+  const removeSuccess = await taskService.remove(req.params.boardId, req.params.id);
+  if (removeSuccess) return  res.sendStatus(204);
+  return res.status(404);
 });
 
 export default router;
