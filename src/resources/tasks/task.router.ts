@@ -7,8 +7,6 @@ const router = express.Router({ mergeParams: true });
 
 interface IRequestParams {
   boardId: string;
-}
-interface IRequestParamsId extends IRequestParams{
   id: string;
 }
 
@@ -35,7 +33,7 @@ router.route('/').post(async (req:express.Request<IRequestParams>, res) => {
   }
 });
 
-router.route('/:id').put(async (req:express.Request<IRequestParamsId>, res) => {
+router.route('/:id').put(async (req:express.Request<IRequestParams>, res) => {
   try {
     const task = await taskService.update(
       req.params.boardId,
@@ -48,7 +46,7 @@ router.route('/:id').put(async (req:express.Request<IRequestParamsId>, res) => {
   }
 });
 
-router.route('/:id').delete(async (req:express.Request<IRequestParamsId>, res) => {
+router.route('/:id').delete(async (req:express.Request<IRequestParams>, res) => {
   const removeSuccess = await taskService.remove(req.params.boardId, req.params.id);
   if (removeSuccess) {
     return  res.status(StatusCodes.NO_CONTENT).json(ReasonPhrases.NO_CONTENT);
