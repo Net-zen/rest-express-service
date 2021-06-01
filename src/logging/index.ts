@@ -13,6 +13,10 @@ interface IRequest extends IncomingMessage {
   protocol: string;
 }
 
+interface Ilogger extends winston.Logger {
+  exit?: (exitCode: number) => void
+}
+
 morgan.token('body', (req: IRequest) =>
   JSON.stringify(
     req.body.password ? { ...req.body, password: '******' } : req.body
@@ -64,7 +68,7 @@ const timestampFormat = () =>
     hour12: false
   });
 
-const logger = winston.createLogger({
+const logger:Ilogger = winston.createLogger({
   transports: [infoTransport, errorTransport],
   format: winston.format.combine(
     winston.format.colorize(),
@@ -76,8 +80,14 @@ const logger = winston.createLogger({
       info => `[${info['timestamp']} UTC+6] ${info.level}: ${info.message}`
     )
   ),
-  exitOnError: true
+  exitOnError: false
 });
+
+logger.exit = (exitCode: number): void => {
+  infoTransport.on('finish', () => process.exit(exitCode));
+  if (infoTransport.close)  infoTransport.close();
+
+};
 
 if (NODE_ENV === 'development') {
   logger.add(new winston.transports.Console(options.console));
@@ -89,4 +99,4 @@ const stream: StreamOptions = {
   },
 };
 
-export { stream as logger };
+export { stream, logger };

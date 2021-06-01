@@ -5,7 +5,7 @@ import YAML from 'yamljs';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
-import { logger } from './logging';
+import { stream, logger } from './logging';
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
@@ -24,9 +24,24 @@ app.use(
     ':protocol :http-version :ip :method :status :url ' +
     'query: :query ' +
     'body: :body size :user-agent :res[content-length] - :response-time ms',
-    { stream: logger }
+    { stream }
   )
 );
+
+process.on('uncaughtException', error => {
+  logger.error(`error message = ${JSON.stringify(error.message)}`);
+  logger.error(`error stack trace = ${error.stack}`);
+  logger.info('Process terminated');
+  if (logger.exit)  logger.exit(1);
+});
+
+process.on('unhandledRejection', (reason: {message: string, stack: string}) => {
+  logger.error(`reject message = ${JSON.stringify(reason.message)}`);
+  logger.error(`reject stack trace = ${reason.stack}`);
+  logger.info('Process terminated');
+  if (logger.exit)  logger.exit(1);
+
+});
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
@@ -43,6 +58,5 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 
 boardRouter.use('/:boardId/tasks', taskRouter);
-
 
 export default app;
