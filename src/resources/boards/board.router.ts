@@ -10,38 +10,23 @@ router.route('/').get(async (_req, res) => {
 });
 
 router.route('/:id').get(async (req, res) => {
-  try {
     const board = await boardService.get(req.params.id);
     return res.json(board);
-  } catch (e) {
-    return res.status(StatusCodes.NOT_FOUND).json(e.message);
-  }
 });
 
 router.route('/').post(async (req, res) => {
-  try {
     const board = await boardService.create(new Board({ ...req.body }));
     return res.status(StatusCodes.CREATED).json(board);
-  } catch (e) {
-    return res.status(StatusCodes.BAD_REQUEST).json(e.message);
-  }
 });
 
 router.route('/:id').put(async (req, res) => {
-  try {
     const board = await boardService.update(req.params.id, req.body);
     return res.json(board);
-  } catch (e) {
-    return res.status(StatusCodes.BAD_REQUEST).json(e.message);
-  }
 });
 
 router.route('/:id').delete(async (req, res) => {
-  const removeSuccess = await boardService.remove(req.params.id);
-  if (removeSuccess) {
-    return  res.status(StatusCodes.NO_CONTENT).json(ReasonPhrases.NO_CONTENT);
-  }
-  return res.status(StatusCodes.NOT_FOUND).json(ReasonPhrases.NOT_FOUND);
+  await boardService.remove(req.params.id);
+  return  res.status(StatusCodes.NO_CONTENT).json(ReasonPhrases.NO_CONTENT);
 });
 
 export default router;

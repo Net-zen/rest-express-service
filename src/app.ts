@@ -1,4 +1,5 @@
 import express from 'express';
+import 'express-async-errors';
 import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
@@ -9,6 +10,7 @@ import { stream, logger } from './logging';
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
+import { errorHandler } from './errors/errorHandler';
 
 const app = express();
 
@@ -58,5 +60,7 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 
 boardRouter.use('/:boardId/tasks', taskRouter);
+
+app.use(errorHandler);
 
 export default app;
