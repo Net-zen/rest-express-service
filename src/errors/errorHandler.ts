@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { IcustomError } from './customErrors';
 import { logger } from '../logging';
 
-const errorHandler = (err:IcustomError, _req:Request, res:Response, next:NextFunction) => {
+const errorHandler = (err:IcustomError, _req:Request, res:Response, next:NextFunction):void => {
   if (err.status) {
     res.status(err.status).send(err.message);
   } else {
