@@ -33,8 +33,7 @@ const updateUser = async (id:string, user:IUser):Promise<IUser | boolean> => {
   if (idx === -1 ) {
     return false;
   }
-  DB.users[idx] = { ...user };
-  DB.users[idx]!.id = id;
+  DB.users[idx] = { ...user, id };
   return { ...DB.users[idx]! };
 };
 

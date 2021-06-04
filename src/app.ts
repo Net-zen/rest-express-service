@@ -6,7 +6,7 @@ import YAML from 'yamljs';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
-import { stream, logger } from './logging';
+import { stream, logger } from './logging/logger';
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';

@@ -1,10 +1,5 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-
-interface IcustomError {
-  status: number;
-  message: string;
-  stack?: string;
-}
+import { IcustomError } from '../common/types';
 
 class NOT_FOUND extends Error implements IcustomError {
 
