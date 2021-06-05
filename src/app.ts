@@ -6,6 +6,7 @@ import YAML from 'yamljs';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { stream, logger } from './logging/logger';
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
@@ -60,6 +61,10 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 
 boardRouter.use('/:boardId/tasks', taskRouter);
+
+app.use((_req, res) => {
+  res.status(StatusCodes.NOT_FOUND).json(ReasonPhrases.NOT_FOUND);
+});
 
 app.use(errorHandler);
 
