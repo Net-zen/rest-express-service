@@ -1,7 +1,13 @@
-const { v4: uuid } = require('uuid');
+import { v4 as uuid } from 'uuid';
+import { Column, IBoard } from '../../common/types';
 
+class Board implements IBoard{
+  id:string;
 
-class Board {
+  title:string;
+
+  columns: Column[];
+
   constructor({
     id = uuid(),
     title = 'Autotest board',
@@ -19,4 +25,4 @@ class Board {
   }
 }
 
-module.exports = Board;
+export default Board;

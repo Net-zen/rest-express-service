@@ -1,12 +1,21 @@
-const DB = {
+import {IUser, ITask, IBoard} from './types'
+
+
+interface IDB {
+  users: IUser[];
+  boards: IBoard[];
+  tasks: ITask[]
+}
+const DB:IDB = {
   users: [],
   boards: [],
   tasks: []
 };
 
-const getAllUsers = async () => [...DB.users];
 
-const getUser = async id => {
+const getAllUsers = async ():Promise<IUser[]> => [...DB.users];
+
+const getUser = async (id:string):Promise<IUser | boolean> => {
   const foundUsers = DB.users.filter(user => user.id === id);
   if (foundUsers.length > 1) {
     throw new Error('Database is corrupted!');
@@ -14,36 +23,38 @@ const getUser = async id => {
   return foundUsers[0] || false;
 };
 
-const createUser = async user => {
+const createUser = async (user:IUser):Promise<IUser | boolean> => {
   DB.users.push(user);
   return getUser(user.id);
 };
 
-const updateUser = async (id, user) => {
+const updateUser = async (id:string, user:IUser):Promise<IUser | boolean> => {
   const idx = DB.users.findIndex(el => el.id === id);
-  if (idx === -1) {
+  if (idx === -1 ) {
     return false;
   }
-  DB.users[idx] = { id, ...user };
-  return { ...DB.users[idx] };
+  DB.users[idx] = { ...user };
+  DB.users[idx]!.id = id;
+  return { ...DB.users[idx]! };
 };
 
-const removeUser = async id => {
+const removeUser = async (id:string):Promise<boolean> => {
   const idx = DB.users.findIndex(el => el.id === id);
   if (idx === -1) {
     return false;
   }
-  const userTasks = DB.tasks.filter(task => task.userId === id);
-    for (let i = 0; i < userTasks.length; i+= 1) {
-      userTasks[i].userId = null;
+  DB.tasks.forEach((task, i) => {
+    if(task.userId === id && DB.tasks[i]) {
+      DB.tasks[i]!.userId = null;
     }
+  });
   DB.users.splice(idx, 1);
   return true;
 };
 
-const getAllBoards = async () => [...DB.boards];
+const getAllBoards = async ():Promise<IBoard[]> => [...DB.boards];
 
-const getBoard = async id => {
+const getBoard = async (id:string):Promise<IBoard | boolean> => {
   const foundBoards = DB.boards.filter(board => board.id === id);
   if (foundBoards.length > 1) {
     throw new Error('Database is corrupted!');
@@ -51,24 +62,24 @@ const getBoard = async id => {
   return foundBoards[0] || false;
 };
 
-const createBoard = async board => {
+const createBoard = async (board:IBoard):Promise<IBoard | boolean> => {
   DB.boards.push(board);
   return getBoard(board.id);
 };
 
-const updateBoard = async (id, board) => {
+const updateBoard = async (id:string, board:IBoard):Promise<IBoard | boolean> => {
   const idx = DB.boards.findIndex(el => el.id === id);
   if (idx === -1) {
     return false;
   }
   DB.boards[idx] = { ...board };
-  return { ...DB.boards[idx] };
+  return { ...DB.boards[idx]! };
 };
 
-const getAllTasksByBoard = async boardId =>
+const getAllTasksByBoard = async (boardId:string):Promise<ITask[]> =>
   DB.tasks.filter(task => task.boardId === boardId);
 
-const getTask = async id => {
+const getTask = async (id:string):Promise<ITask | boolean> => {
   const foundTasks = DB.tasks.filter(task => task.id === id);
   if (foundTasks.length > 1) {
     throw new Error('Database is corrupted!');
@@ -76,21 +87,22 @@ const getTask = async id => {
   return foundTasks[0] || false;
 };
 
-const createTask = async task => {
+const createTask = async (task:ITask):Promise<ITask | boolean> => {
   DB.tasks.push(task);
   return getTask(task.id);
 };
 
-const updateTaskInBoard = async (boardId, id, task) => {
+const updateTaskInBoard = async (boardId:string, id:string, task:ITask):
+                                              Promise<ITask | boolean> => {
   const idx = DB.tasks.findIndex(el => el.id === id && el.boardId === boardId);
   if (idx === -1) {
     return false;
   }
   DB.tasks[idx] = { ...task };
-  return { ...DB.tasks[idx] };
+  return { ...DB.tasks[idx]! };
 };
 
-const removeTask = async (boardId, id) => {
+const removeTask = async (boardId:string, id:string):Promise<boolean> => {
   const idx = DB.tasks.findIndex(
     task => task.boardId === boardId && task.id === id
   );
@@ -101,7 +113,7 @@ const removeTask = async (boardId, id) => {
   return true;
 };
 
-const removeBoard = async id => {
+const removeBoard = async (id:string):Promise<boolean> => {
   const idx = DB.boards.findIndex(board => board.id === id);
   if (idx === -1) {
     return false;
@@ -113,6 +125,6 @@ const removeBoard = async id => {
   return true;
 };
 
-module.exports = { getAllUsers, getUser, createUser, updateUser, removeUser,
-                  getAllBoards, getBoard, createBoard, updateBoard, removeBoard,
-                  getAllTasksByBoard, getTask, createTask, updateTaskInBoard, removeTask};
+export { getAllUsers, getUser, createUser, updateUser, removeUser,
+         getAllBoards, getBoard, createBoard, updateBoard, removeBoard,
+         getAllTasksByBoard, getTask, createTask, updateTaskInBoard, removeTask};
