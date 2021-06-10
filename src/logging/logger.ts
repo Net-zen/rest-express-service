@@ -59,7 +59,7 @@ const infoTransport = new winston.transports.DailyRotateFile({
 const errorTransport = new winston.transports.DailyRotateFile({
   ...options.file,
   level: 'error',
-  filename: `${__dirname}/../logs/rest-service-ERRORS-%DATE%.log`
+  filename: `${__dirname}/../../logs/rest-service-ERRORS-%DATE%.log`
 });
 
 const timestampFormat = () =>
