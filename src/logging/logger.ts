@@ -53,7 +53,7 @@ const options = {
 const infoTransport = new winston.transports.DailyRotateFile({
   ...options.file,
   level: 'info',
-  filename: `${__dirname}/../logs/rest-service-info-%DATE%.log`
+  filename: `${__dirname}/../../logs/rest-service-info-%DATE%.log`
 });
 
 const errorTransport = new winston.transports.DailyRotateFile({
