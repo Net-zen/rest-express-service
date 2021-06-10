@@ -1,0 +1,7 @@
+.idea
+.git
+.vscode
+.github
+node_modules
+build
+src/logs
