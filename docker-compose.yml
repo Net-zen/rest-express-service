@@ -2,6 +2,7 @@ version: "3.9"
 services:
   node:
     build: .
+    image: net1zen/rest-app-node
     ports:
       - ${PORT}:${PORT}
     depends_on:
@@ -18,6 +19,7 @@ services:
       - net
   postgres:
     build: ./database
+    image: net1zen/rest-app-postgres
     ports:
     - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
