@@ -12,9 +12,7 @@ services:
     - ./src:/usr/src/app/src
     environment:
       PORT: ${PORT}
-    deploy:
-      restart_policy:
-        condition: on-failure
+    restart: on-failure
     networks:
       - net
   postgres:
