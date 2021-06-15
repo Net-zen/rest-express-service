@@ -28,4 +28,11 @@ interface IBoard {
   columns: Column[];
 }
 
-export {IUser, ITask, Column, IBoard}
+
+interface IcustomError {
+  status: number;
+  message: string;
+  stack?: string;
+}
+
+export {IUser, ITask, Column, IBoard, IcustomError}

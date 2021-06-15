@@ -33,9 +33,12 @@ const updateUser = async (id:string, user:IUser):Promise<IUser | boolean> => {
   if (idx === -1 ) {
     return false;
   }
-  DB.users[idx] = { ...user };
-  DB.users[idx]!.id = id;
-  return { ...DB.users[idx]! };
+  DB.users[idx] = { ...user, id };
+  const updatedUser = DB.users[idx];
+  if (!updatedUser) {
+    throw new Error('Something wrong!')
+  }
+  return { ...updatedUser };
 };
 
 const removeUser = async (id:string):Promise<boolean> => {
@@ -45,7 +48,10 @@ const removeUser = async (id:string):Promise<boolean> => {
   }
   DB.tasks.forEach((task, i) => {
     if(task.userId === id && DB.tasks[i]) {
-      DB.tasks[i]!.userId = null;
+      const taskI = DB.tasks[i]
+      if (taskI) {
+        taskI.userId = null;
+      }
     }
   });
   DB.users.splice(idx, 1);
@@ -73,7 +79,11 @@ const updateBoard = async (id:string, board:IBoard):Promise<IBoard | boolean> =>
     return false;
   }
   DB.boards[idx] = { ...board };
-  return { ...DB.boards[idx]! };
+  const updatedBoard = DB.boards[idx];
+  if (!updatedBoard) {
+    throw new Error('Something wrong!')
+  }
+  return { ...updatedBoard };
 };
 
 const getAllTasksByBoard = async (boardId:string):Promise<ITask[]> =>
@@ -99,7 +109,11 @@ const updateTaskInBoard = async (boardId:string, id:string, task:ITask):
     return false;
   }
   DB.tasks[idx] = { ...task };
-  return { ...DB.tasks[idx]! };
+  const updatedTask = DB.tasks[idx];
+  if (!updatedTask) {
+    throw new Error('Something wrong!')
+  }
+  return { ...updatedTask };
 };
 
 const removeTask = async (boardId:string, id:string):Promise<boolean> => {
