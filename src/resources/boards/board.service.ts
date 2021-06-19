@@ -1,14 +1,14 @@
-import boardRepo from './board.memory.repository';
-import { IBoard } from '../../common/types';
+import boardRepo from './board.repository';
+import { Board } from './board.model';
 
 
-const getAll = ():Promise<IBoard[]> => boardRepo.getAll();
+const getAll = ():Promise<Board[]> => boardRepo.getAll();
 
-const get = (id:string):Promise<IBoard> => boardRepo.get(id);
+const get = (id:string):Promise<Board> => boardRepo.get(id);
 
-const create = (board:IBoard):Promise<IBoard> => boardRepo.create(board);
+const create = (board:Board):Promise<Board> => boardRepo.create(board);
 
-const update = (id:string, board:IBoard):Promise<IBoard> => boardRepo.update(id, board);
+const update = (id:string, board:Board):Promise<Board> => boardRepo.update(id, board);
 
 const remove = (id:string):Promise<boolean> => boardRepo.remove(id);
 

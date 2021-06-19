@@ -16,7 +16,7 @@ interface ITask {
 }
 
 
-type Column = {
+interface IColumn {
   id:string;
   title: string;
   order: number
@@ -25,7 +25,7 @@ type Column = {
 interface IBoard {
   id:string;
   title:string;
-  columns: Column[];
+  columns: IColumn[];
 }
 
 
@@ -35,4 +35,4 @@ interface IcustomError {
   stack?: string;
 }
 
-export {IUser, ITask, Column, IBoard, IcustomError}
+export {IUser, ITask, IColumn, IBoard, IcustomError}
