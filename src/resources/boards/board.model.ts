@@ -13,28 +13,3 @@ export class Board {
   columns!: string;
 }
 
-// class Board implements IBoard{
-//   id:string;
-//
-//   title:string;
-//
-//   columns: Column[];
-//
-//   constructor({
-//     id = uuid(),
-//     title = 'Autotest board',
-//     columns = [
-//       {
-//         id: uuid(),
-//         title: 'Backlog',
-//         order: 0
-//       }
-//     ]
-//   } = {}) {
-//     this.id = id;
-//     this.title = title;
-//     this.columns = columns;
-//   }
-// }
-//
-// export default Board;
