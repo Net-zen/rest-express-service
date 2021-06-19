@@ -1,5 +1,4 @@
 import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
-import { IColumn } from '../../common/types';
 
 @Entity()
 export class Board {
@@ -10,8 +9,8 @@ export class Board {
   @Column()
   title!: string;
 
-  @Column('simple-array')
-  columns!: IColumn[];
+  @Column('json', {nullable: true})
+  columns!: string;
 }
 
 // class Board implements IBoard{
