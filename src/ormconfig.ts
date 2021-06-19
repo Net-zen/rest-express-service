@@ -4,7 +4,7 @@ import { POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD,
   POSTGRES_DB, POSTGRES_HOST } from './common/config';
 
 
-export const config: ConnectionOptions = {
+const config: ConnectionOptions = {
   type: 'postgres',
   host: POSTGRES_HOST || 'localhost',
   port: POSTGRES_PORT ? parseInt(POSTGRES_PORT, 10) : 5432,
@@ -15,10 +15,10 @@ export const config: ConnectionOptions = {
   synchronize: false,
   migrationsRun: true,
   connectTimeoutMS: 60000,
-  logging: true,
-  logger: 'file',
-  migrations: [path.join(__dirname, '/database/migrations/**/*{.ts,.js}')],
+  migrations: [path.join(__dirname, '/migrations/**/*{.ts,.js}')],
   cli: {
-    migrationsDir: 'src/migrations',
+    migrationsDir: './src/migrations',
   },
 };
+
+export default config;

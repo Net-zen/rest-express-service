@@ -4,3 +4,4 @@ test
 .vscode
 .idea
 build
+/**/migrations
