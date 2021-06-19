@@ -13,7 +13,7 @@ export class User {
   login!: string;
 
   @Column()
-  password!: boolean;
+  password!: string;
 
 }
 

@@ -1,6 +1,7 @@
 import { getRepository } from "typeorm";
 import { User } from './user.model';
 import { NOT_FOUND, BAD_REQUEST } from '../../errors/customErrors';
+import { unassignUserTasks } from '../tasks/task.repository';
 
 
 const getAll = ():Promise<User[]> => {
@@ -38,10 +39,11 @@ const update = async (id:string, user:User):Promise<User> => {
 }
 
 const remove = async (id:string):Promise<boolean> => {
+  await unassignUserTasks(id);
   const userRepository = getRepository(User);
   const removeSuccess = await userRepository.delete(id);
   if (!removeSuccess.affected) throw new NOT_FOUND();
   return true;
 };
 
-export default { getAll, get, create, update, remove };
+export { getAll, get, create, update, remove };

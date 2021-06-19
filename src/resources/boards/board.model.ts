@@ -10,12 +10,8 @@ export class Board {
   @Column()
   title!: string;
 
-  @Column()
+  @Column('simple-array')
   columns!: IColumn[];
-
-  @Column()
-  password!: boolean;
-
 }
 
 // class Board implements IBoard{

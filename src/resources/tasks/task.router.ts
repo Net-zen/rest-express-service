@@ -1,7 +1,6 @@
 import express from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import taskService from  './task.service';
-import Task from  './task.model';
 
 const router = express.Router({ mergeParams: true });
 
@@ -20,8 +19,7 @@ router.route('/:id').get(async (req, res) => {
 });
 
 router.route('/').post(async (req:express.Request<IRequestParams>, res) => {
-  const task = await taskService.create(
-    new Task({ ...req.body, boardId: req.params.boardId }));
+  const task = await taskService.create({ ...req.body, boardId: req.params.boardId });
   return res.status(StatusCodes.CREATED).json(task);
 });
 
