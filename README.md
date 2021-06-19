@@ -21,7 +21,7 @@ npm install
 ## Building docker images and running application
 
 ```
-docker compose up
+docker compose up --build
 ```
 
 After starting the app on port (4000 as default) you can open
@@ -85,6 +85,11 @@ If you're using VSCode, you can get a better developer experience from integrati
 
 ```
 npm run lint
+```
+### Auto-fix and format in running docker container
+
+```
+docker exec CONTAINER npm run lint
 ```
 
 ### Debugging in VSCode
