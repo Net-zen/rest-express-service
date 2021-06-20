@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { IcustomError } from '../common/types';
+import { IcustomError } from './customErrors';
 import { logger } from '../logging/logger';
 
 const errorHandler = (err:IcustomError, _req:Request, res:Response, next:NextFunction):void => {
