@@ -4,6 +4,7 @@
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- Docker - [Download & Install Docker](https://docs.docker.com/engine/install/).
 
 ## Downloading
 
@@ -17,10 +18,10 @@ git clone {repository URL}
 npm install
 ```
 
-## Running application
+## Building docker images and running application
 
 ```
-npm start
+docker compose up
 ```
 
 After starting the app on port (4000 as default) you can open
@@ -37,10 +38,21 @@ To run all tests without authorization
 npm test
 ```
 
+To run all tests without authorization from running docker container
+
+```
+docker exec CONTAINER npm test
+```
+
 To run only one of all test suites (users, boards or tasks)
 
 ```
 npm test <suite name>
+```
+To run only one of all test suites (users, boards or tasks) from running docker container
+
+```
+docker exec CONTAINER npm test <suite name>
 ```
 
 To run all test with authorization
@@ -48,11 +60,21 @@ To run all test with authorization
 ```
 npm run test:auth
 ```
+To run all test with authorization from running docker container
+
+```
+docker exec CONTAINER npm run test:auth
+```
 
 To run only specific test suite with authorization (users, boards or tasks)
 
 ```
 npm run test:auth <suite name>
+```
+To run only specific test suite with authorization (users, boards or tasks) from running docker container
+
+```
+docker exec CONTAINER npm run test:auth <suite name>
 ```
 
 ## Development

@@ -1,4 +1,5 @@
 node_modules
 .idea
 build
-src/logs
+logs
+db_data
