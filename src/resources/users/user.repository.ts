@@ -46,4 +46,9 @@ const remove = async (id:string):Promise<boolean> => {
   return true;
 };
 
-export { getAll, get, create, update, remove };
+const getByLogin = async (login:string):Promise<User | undefined> => {
+  const userRepository = getRepository(User);
+  return userRepository.findOne(login);
+};
+
+export { getAll, get, create, update, remove, getByLogin };

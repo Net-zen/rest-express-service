@@ -11,7 +11,9 @@ import { stream, logger } from './logging/logger';
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
+import loginRouter from './resources/login/login.router';
 import { errorHandler } from './errors/errorHandler';
+import { authenticateToken } from './authentification/authentification';
 
 const app = express();
 
@@ -55,6 +57,10 @@ app.use('/', (req, res, next) => {
   }
   next();
 });
+
+app.use('/login', loginRouter);
+
+app.use(authenticateToken);
 
 app.use('/users', userRouter);
 
