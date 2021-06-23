@@ -1,7 +1,20 @@
 import { getRepository } from "typeorm";
+import bcrypt from 'bcrypt';
 import { User } from './user.model';
 import { NOT_FOUND, BAD_REQUEST } from '../../errors/customErrors';
 import { unassignUserTasks } from '../tasks/task.repository';
+
+
+const createAdmin = async ():Promise<void> => {
+  const userRepository = getRepository(User);
+  const salt = await bcrypt.genSalt(10);
+  const createdUser = await userRepository.create({
+    name: 'admin',
+    login: 'admin',
+    password: await bcrypt.hash('admin', salt)
+  });
+  await userRepository.save(createdUser);
+};
 
 
 const getAll = ():Promise<User[]> => {
@@ -48,7 +61,7 @@ const remove = async (id:string):Promise<boolean> => {
 
 const getByLogin = async (login:string):Promise<User | undefined> => {
   const userRepository = getRepository(User);
-  return userRepository.findOne(login);
+  return userRepository.findOne({ login });
 };
 
-export { getAll, get, create, update, remove, getByLogin };
+export { getAll, get, create, update, remove, getByLogin, createAdmin };
