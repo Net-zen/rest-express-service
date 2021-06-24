@@ -22,3 +22,4 @@ export const toResponse = (user:User):Omit<User, 'password'> => {
   return { id, name, login };
 };
 
+export type UserDto = Omit<User, 'id'>

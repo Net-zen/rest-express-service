@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { Task } from './task.model';
+import { Task, TaskDto } from './task.model';
 import { NOT_FOUND, BAD_REQUEST } from '../../errors/customErrors';
 
 const getAll = async (boardId:string):Promise<Task[]> => {
@@ -16,7 +16,7 @@ const get = async (id:string):Promise<Task> => {
   return task;
 };
 
-const create = async (task:Task):Promise<Task> => {
+const create = async (task:TaskDto):Promise<Task> => {
   const taskRepository = getRepository(Task);
   const createdTask = await taskRepository.create(task);
   const savedTask = await taskRepository.save(createdTask);
@@ -26,7 +26,7 @@ const create = async (task:Task):Promise<Task> => {
   return createdTask;
 }
 
-const update = async (boardId:string, id:string, task:Task):Promise<Task> => {
+const update = async (boardId:string, id:string, task:TaskDto):Promise<Task> => {
   const taskRepository = getRepository(Task);
   const res = await taskRepository.findOne({boardId, id});
   if (typeof res === 'undefined'){

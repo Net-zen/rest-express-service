@@ -1,21 +1,8 @@
 import { getRepository } from "typeorm";
 import bcrypt from 'bcrypt';
-import { User } from './user.model';
+import { User, UserDto } from './user.model';
 import { NOT_FOUND, BAD_REQUEST } from '../../errors/customErrors';
 import { unassignUserTasks } from '../tasks/task.repository';
-
-
-const createAdmin = async ():Promise<void> => {
-  const userRepository = getRepository(User);
-  const salt = await bcrypt.genSalt(10);
-  const createdUser = await userRepository.create({
-    name: 'admin',
-    login: 'admin',
-    password: await bcrypt.hash('admin', salt)
-  });
-  await userRepository.save(createdUser);
-};
-
 
 const getAll = ():Promise<User[]> => {
   const userRepository = getRepository(User);
@@ -31,7 +18,7 @@ const get = async (id:string):Promise<User> => {
   return user;
 };
 
-const create = async (user:User):Promise<User> => {
+const create = async (user:UserDto):Promise<User> => {
   const userRepository = getRepository(User);
   const createdUser = userRepository.create(user);
   const savedUser = await userRepository.save(createdUser);
@@ -41,7 +28,7 @@ const create = async (user:User):Promise<User> => {
   return savedUser;
 }
 
-const update = async (id:string, user:User):Promise<User> => {
+const update = async (id:string, user:UserDto):Promise<User> => {
   const userRepository = getRepository(User);
   const res = await userRepository.findOne(id);
   if (typeof res === 'undefined'){
@@ -62,6 +49,15 @@ const remove = async (id:string):Promise<boolean> => {
 const getByLogin = async (login:string):Promise<User | undefined> => {
   const userRepository = getRepository(User);
   return userRepository.findOne({ login });
+};
+
+const createAdmin = async ():Promise<void> => {
+  const salt = await bcrypt.genSalt(10);
+  await create({
+    name: 'admin',
+    login: 'admin',
+    password: await bcrypt.hash('admin', salt)
+  });
 };
 
 export { getAll, get, create, update, remove, getByLogin, createAdmin };
