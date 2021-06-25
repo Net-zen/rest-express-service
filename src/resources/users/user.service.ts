@@ -1,14 +1,14 @@
-import usersRepo from './user.memory.repository';
-import { IUser } from '../../common/types';
+import * as usersRepo from './user.repository';
+import { User } from './user.model';
 
 
-const getAll = ():Promise<IUser[]> => usersRepo.getAll();
+const getAll = ():Promise<User[]> => usersRepo.getAll();
 
-const get = (id:string):Promise<IUser> => usersRepo.get(id);
+const get = (id:string):Promise<User> => usersRepo.get(id);
 
-const create = (user:IUser):Promise<IUser> => usersRepo.create(user);
+const create = (user:User):Promise<User> => usersRepo.create(user);
 
-const update = (id:string, user:IUser):Promise<IUser> => usersRepo.update(id, user);
+const update = (id:string, user:User):Promise<User> => usersRepo.update(id, user);
 
 const remove =  (id:string):Promise<boolean> => usersRepo.remove(id);
 

@@ -1,6 +1,5 @@
 import express from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import Board from './board.model';
 import boardService from './board.service';
 
 const router = express.Router();
@@ -15,7 +14,7 @@ router.route('/:id').get(async (req, res) => {
 });
 
 router.route('/').post(async (req, res) => {
-    const board = await boardService.create(new Board({ ...req.body }));
+    const board = await boardService.create({ ...req.body });
     return res.status(StatusCodes.CREATED).json(board);
 });
 

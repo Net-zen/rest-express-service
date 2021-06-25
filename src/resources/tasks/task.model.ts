@@ -1,38 +1,27 @@
-import { v4 as uuid } from 'uuid';
-import { ITask } from '../../common/types';
+import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
 
-class Task implements ITask{
-  id:string;
+@Entity()
+export class Task {
 
-  title:string;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-  order:string;
+  @Column()
+  title!: string;
 
-  description:string;
+  @Column()
+  order?: number = 1;
 
-  userId:string | null;
+  @Column()
+  description!: string;
 
-  boardId:string | null;
+  @Column({nullable: true})
+  userId!: string;
 
-  columnId:string | null;
+  @Column({nullable: true})
+  boardId!: string;
 
-  constructor({
-    id = uuid(),
-    title = 'TASK',
-    order = '0',
-    description = 'description',
-    userId = null,
-    boardId = null,
-    columnId = null
-  } = {}) {
-    this.id = id;
-    this.title = title;
-    this.order = order;
-    this.description = description;
-    this.userId = userId;
-    this.boardId = boardId;
-    this.columnId = columnId;
-  }
+  @Column({nullable: true})
+  columnId!: string;
 }
 
-export default Task;
