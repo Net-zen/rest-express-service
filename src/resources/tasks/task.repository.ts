@@ -24,7 +24,7 @@ const create = async (task:TaskDto):Promise<Task> => {
     throw new BAD_REQUEST(`Something went wrong! Task not created`);
   }
   return createdTask;
-}
+};
 
 const update = async (boardId:string, id:string, task:TaskDto):Promise<Task> => {
   const taskRepository = getRepository(Task);

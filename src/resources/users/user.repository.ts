@@ -24,7 +24,7 @@ const create = async (user:UserDto):Promise<User> => {
     throw new BAD_REQUEST(`Something went wrong! User not created`);
   }
   return savedUser;
-}
+};
 
 const update = async (id:string, user:UserDto):Promise<User> => {
   const userRepository = getRepository(User);
@@ -34,7 +34,7 @@ const update = async (id:string, user:UserDto):Promise<User> => {
   }
   const updatedUser = await userRepository.update(id, user);
   return updatedUser.raw;
-}
+};
 
 const remove = async (id:string):Promise<boolean> => {
   const userRepository = getRepository(User);

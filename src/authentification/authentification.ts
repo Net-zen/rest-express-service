@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 import { UNAUTHORIZED } from '../errors/customErrors';
-import { JWT_SECRET_KEY } from '../common/config'
+import { JWT_SECRET_KEY } from '../common/config';
 
 const authenticateToken:RequestHandler = async (req, _res, next) => {
   const authHeader = req.headers.authorization;

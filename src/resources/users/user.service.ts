@@ -10,7 +10,7 @@ const get = (id:string):Promise<User> => usersRepo.get(id);
 
 const create = async (user:UserDto):Promise<User> => {
   const salt = await bcrypt.genSalt(10);
-  const password = await bcrypt.hash(user.password, salt)
+  const password = await bcrypt.hash(user.password, salt);
   return usersRepo.create({ ...user, password });
 };
 
