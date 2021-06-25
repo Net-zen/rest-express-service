@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import * as usersRepo from './user.repository';
 import { User, UserDto } from './user.model';
+import { unassignUserTasks } from '../tasks/task.repository';
 
 
 const getAll = ():Promise<User[]> => usersRepo.getAll();
@@ -15,7 +16,10 @@ const create = async (user:UserDto):Promise<User> => {
 
 const update = (id:string, user:UserDto):Promise<User> => usersRepo.update(id, user);
 
-const remove =  (id:string):Promise<boolean> => usersRepo.remove(id);
+const remove =  async (id:string):Promise<boolean> => {
+  await unassignUserTasks(id);
+  return usersRepo.remove(id);
+};
 
 const createAdmin = async ():Promise<void> => {
   await create({
