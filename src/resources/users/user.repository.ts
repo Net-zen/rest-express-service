@@ -50,13 +50,5 @@ const getByLogin = async (login:string):Promise<User | undefined> => {
   return userRepository.findOne({ login });
 };
 
-const createAdmin = async ():Promise<void> => {
-  const salt = await bcrypt.genSalt(10);
-  await create({
-    name: 'admin',
-    login: 'admin',
-    password: await bcrypt.hash('admin', salt)
-  });
-};
 
-export { getAll, get, create, update, remove, getByLogin, createAdmin };
+export { getAll, get, create, update, remove, getByLogin };

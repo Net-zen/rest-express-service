@@ -17,4 +17,12 @@ const update = (id:string, user:UserDto):Promise<User> => usersRepo.update(id, u
 
 const remove =  (id:string):Promise<boolean> => usersRepo.remove(id);
 
-export default { getAll, get, create, update, remove };
+const createAdmin = async ():Promise<void> => {
+  await create({
+    name: 'admin',
+    login: 'admin',
+    password:'admin'
+  });
+};
+
+export default { getAll, get, create, update, remove, createAdmin };
