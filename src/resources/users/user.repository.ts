@@ -1,5 +1,4 @@
 import { getRepository } from "typeorm";
-import bcrypt from 'bcrypt';
 import { User, UserDto } from './user.model';
 import { NOT_FOUND, BAD_REQUEST } from '../../errors/customErrors';
 import { unassignUserTasks } from '../tasks/task.repository';
