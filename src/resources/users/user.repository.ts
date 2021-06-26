@@ -16,15 +16,6 @@ const get = async (id:string):Promise<User> => {
   return user;
 };
 
-const create = async (user:UserDto):Promise<User> => {
-  const userRepository = getRepository(User);
-  const createdUser = userRepository.create(user);
-  const savedUser = await userRepository.save(createdUser);
-  if (typeof savedUser === 'undefined'){
-    throw new BAD_REQUEST(`Something went wrong! User not created`);
-  }
-  return savedUser;
-};
 
 const update = async (id:string, user:UserDto):Promise<User> => {
   const userRepository = getRepository(User);
@@ -48,5 +39,16 @@ const getByLogin = async (login:string):Promise<User | undefined> => {
   return userRepository.findOne({ login });
 };
 
+const create = async (user:UserDto):Promise<User> => {
+  const existUser = await getByLogin(user.login);
+  if (existUser) throw new BAD_REQUEST(`User with login ${user.login} already registered` );
+  const userRepository = getRepository(User);
+  const createdUser = userRepository.create(user);
+  const savedUser = await userRepository.save(createdUser);
+  if (typeof savedUser === 'undefined'){
+    throw new BAD_REQUEST(`Something went wrong! User not created`);
+  }
+  return savedUser;
+};
 
 export { getAll, get, create, update, remove, getByLogin };

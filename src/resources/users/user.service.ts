@@ -22,11 +22,14 @@ const remove =  async (id:string):Promise<boolean> => {
 };
 
 const createAdmin = async ():Promise<void> => {
-  await create({
-    name: 'admin',
-    login: 'admin',
-    password:'admin'
-  });
+  const existAdmin = await usersRepo.getByLogin('admin');
+  if (!existAdmin) {
+    await create({
+      name: 'admin',
+      login: 'admin',
+      password: 'admin'
+    });
+  }
 };
 
 export default { getAll, get, create, update, remove, createAdmin };
