@@ -1,26 +1,62 @@
-import { Injectable } from '@nestjs/common';
-import { CreateBoardDto } from './dto/create-board.dto';
-import { UpdateBoardDto } from './dto/update-board.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BoardDto } from './dto/board.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Board } from './entities/board.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BoardsService {
-  create(createBoardDto: CreateBoardDto) {
-    return 'This action adds a new board';
+  constructor(
+    @InjectRepository(Board)
+    private boardsRepository: Repository<Board>,
+  ) {}
+  async create(board: BoardDto) {
+    const createdBoard = await this.boardsRepository.create(board);
+    const savedBoard = await this.boardsRepository.save(createdBoard);
+    if (typeof savedBoard === 'undefined') {
+      throw new HttpException(
+        `Something went wrong! Board not created`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return createdBoard;
   }
 
-  findAll() {
-    return `This action returns all boards`;
+  async findAll() {
+    return this.boardsRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} board`;
+  async findOne(id: string) {
+    const board = await this.boardsRepository.findOne(id);
+    if (typeof board === 'undefined') {
+      throw new HttpException(
+        `Board with id:${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return board;
   }
 
-  update(id: number, updateBoardDto: UpdateBoardDto) {
-    return `This action updates a #${id} board`;
+  async update(id: string, board: BoardDto) {
+    const res = await this.boardsRepository.findOne(id);
+    if (typeof res === 'undefined') {
+      throw new HttpException(
+        `Board with id:${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const updatedBoard = await this.boardsRepository.update(id, board);
+    return updatedBoard.raw;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} board`;
+  async remove(id: string) {
+    const removeSuccess = await this.boardsRepository.delete(id);
+    if (!removeSuccess.affected) {
+      throw new HttpException(
+        `Board with id:${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return true;
   }
 }

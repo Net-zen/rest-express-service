@@ -3,40 +3,41 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
+  HttpStatus,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
-import { CreateBoardDto } from './dto/create-board.dto';
-import { UpdateBoardDto } from './dto/update-board.dto';
+import { BoardDto } from './dto/board.dto';
 
 @Controller('boards')
 export class BoardsController {
   constructor(private readonly boardsService: BoardsService) {}
 
   @Post()
-  create(@Body() createBoardDto: CreateBoardDto) {
-    return this.boardsService.create(createBoardDto);
+  async create(@Body() board: BoardDto) {
+    return this.boardsService.create(board);
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.boardsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.boardsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return this.boardsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
-    return this.boardsService.update(+id, updateBoardDto);
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() board: BoardDto) {
+    return this.boardsService.update(id, board);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.boardsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    await this.boardsService.remove(id);
+    return HttpStatus.OK;
   }
 }

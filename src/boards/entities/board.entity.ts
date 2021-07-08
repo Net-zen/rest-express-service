@@ -11,5 +11,3 @@ export class Board {
   @Column('json', { nullable: true })
   columns!: string;
 }
-
-export type BoardDto = Omit<Board, 'id'>;
