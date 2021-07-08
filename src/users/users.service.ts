@@ -1,26 +1,72 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { UserDto } from './dto/user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
+  async create(user: UserDto): Promise<User> {
+    const existUser = await this.getByLogin(user.login);
+    if (existUser) {
+      throw new HttpException(
+        `User with login ${user.login} already registered`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const createdUser = this.usersRepository.create(user);
+    const savedUser = this.usersRepository.save(createdUser);
+    if (typeof savedUser === 'undefined') {
+      throw new HttpException(
+        `Something went wrong! User not created`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return savedUser;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return this.usersRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    const user = await this.usersRepository.findOne(id);
+    if (typeof user === 'undefined') {
+      throw new HttpException(
+        `User with id:${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, user: UserDto) {
+    const res = await this.usersRepository.findOne(id);
+    if (typeof res === 'undefined') {
+      throw new HttpException(
+        `User with id:${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const updatedUser = await this.usersRepository.update(id, user);
+    return updatedUser.raw;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const removeSuccess = await this.usersRepository.delete(id);
+    if (!removeSuccess.affected) {
+      throw new HttpException(
+        `User with id:${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return true;
+  }
+  async getByLogin(login: string): Promise<User | undefined> {
+    return this.usersRepository.findOne({ login });
   }
 }

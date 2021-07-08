@@ -3,21 +3,19 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  id: string;
 
   @Column()
-  name!: string;
+  name: string;
 
   @Column()
-  login!: string;
+  login: string;
 
   @Column()
-  password!: string;
+  password: string;
 }
 
 export const toResponse = (user: User): Omit<User, 'password'> => {
   const { id, name, login } = user;
   return { id, name, login };
 };
-
-export type UserDto = Omit<User, 'id'>;
