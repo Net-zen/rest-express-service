@@ -3,12 +3,15 @@ import { BoardDto } from './dto/board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from './entities/board.entity';
 import { Repository } from 'typeorm';
+import { Task } from '../tasks/entities/task.entity';
 
 @Injectable()
 export class BoardsService {
   constructor(
     @InjectRepository(Board)
     private boardsRepository: Repository<Board>,
+    @InjectRepository(Task)
+    private tasksRepository: Repository<Task>,
   ) {}
   async create(board: BoardDto) {
     const createdBoard = await this.boardsRepository.create(board);
@@ -50,6 +53,7 @@ export class BoardsService {
   }
 
   async remove(id: string) {
+    await this.tasksRepository.delete({ boardId: id });
     const removeSuccess = await this.boardsRepository.delete(id);
     if (!removeSuccess.affected) {
       throw new HttpException(

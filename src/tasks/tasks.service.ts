@@ -1,26 +1,62 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { TaskDto } from './dto/task.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Task } from './entities/task.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TasksService {
-  create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+  constructor(
+    @InjectRepository(Task)
+    private tasksRepository: Repository<Task>,
+  ) {}
+  async create(task: TaskDto) {
+    const createdTask = await this.tasksRepository.create(task);
+    const savedTask = await this.tasksRepository.save(createdTask);
+    if (typeof savedTask === 'undefined') {
+      throw new HttpException(
+        `Something went wrong! Task not created`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return createdTask;
   }
 
-  findAll() {
-    return `This action returns all tasks`;
+  async findAll(boardId: string) {
+    return this.tasksRepository.find({ boardId });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findOne(id: string) {
+    const task = await this.tasksRepository.findOne(id);
+    if (typeof task === 'undefined') {
+      throw new HttpException(
+        `Task with id:${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return task;
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+  async update(boardId: string, id: string, task: TaskDto) {
+    const res = await this.tasksRepository.findOne({ boardId, id });
+    if (typeof res === 'undefined') {
+      throw new HttpException(
+        `Task with id: ${id} not found in board with id: ${boardId}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const updatedTask = await this.tasksRepository.update(id, task);
+    return updatedTask.raw;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async remove(boardId: string, id: string) {
+    const removeSuccess = await this.tasksRepository.delete({ boardId, id });
+    if (!removeSuccess.affected) {
+      throw new HttpException(
+        `Task with id: ${id} not found in board with id: ${boardId}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return true;
   }
 }

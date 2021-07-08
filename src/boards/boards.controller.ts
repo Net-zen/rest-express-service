@@ -16,22 +16,22 @@ export class BoardsController {
   constructor(private readonly boardsService: BoardsService) {}
 
   @Post()
-  async create(@Body() board: BoardDto) {
+  create(@Body() board: BoardDto) {
     return this.boardsService.create(board);
   }
 
   @Get()
-  async findAll() {
+  findAll() {
     return this.boardsService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string) {
     return this.boardsService.findOne(id);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() board: BoardDto) {
+  update(@Param('id') id: string, @Body() board: BoardDto) {
     return this.boardsService.update(id, board);
   }
 

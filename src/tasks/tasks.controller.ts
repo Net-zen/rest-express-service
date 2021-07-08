@@ -3,40 +3,45 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
+  HttpStatus,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { TaskDto } from './dto/task.dto';
 
-@Controller('tasks')
+@Controller('boards')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
+  @Post(':boardId/tasks')
+  create(@Param('boardId') boardId: string, @Body() task: TaskDto) {
+    return this.tasksService.create({ ...task, boardId });
   }
 
-  @Get()
-  findAll() {
-    return this.tasksService.findAll();
+  @Get(':boardId/tasks')
+  findAll(@Param('boardId') boardId: string) {
+    return this.tasksService.findAll(boardId);
   }
 
-  @Get(':id')
+  @Get(':boardId/tasks/:id')
   findOne(@Param('id') id: string) {
-    return this.tasksService.findOne(+id);
+    return this.tasksService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.tasksService.update(+id, updateTaskDto);
+  @Put(':boardId/tasks/:id')
+  update(
+    @Param('id') id: string,
+    @Param('boardId') boardId: string,
+    @Body() task: TaskDto,
+  ) {
+    return this.tasksService.update(boardId, id, task);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tasksService.remove(+id);
+  @Delete(':boardId/tasks/:id')
+  async remove(@Param('id') id: string, @Param('boardId') boardId: string) {
+    await this.tasksService.remove(boardId, id);
+    return HttpStatus.OK;
   }
 }
