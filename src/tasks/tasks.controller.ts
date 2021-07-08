@@ -7,11 +7,14 @@ import {
   Param,
   Delete,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { TaskDto } from './dto/task.dto';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('boards')
+@UseGuards(AuthGuard)
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 

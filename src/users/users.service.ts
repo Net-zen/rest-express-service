@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { UserDto } from './dto/user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -21,7 +22,9 @@ export class UsersService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const createdUser = this.usersRepository.create(user);
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(user.password, salt);
+    const createdUser = this.usersRepository.create({ ...user, password });
     const savedUser = this.usersRepository.save(createdUser);
     if (typeof savedUser === 'undefined') {
       throw new HttpException(

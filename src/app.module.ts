@@ -9,10 +9,12 @@ import { BoardsModule } from './boards/boards.module';
 import { User } from './users/entities/user.entity';
 import { Board } from './boards/entities/board.entity';
 import { Task } from './tasks/entities/task.entity';
+import { LoginModule } from './login/login.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: '.env',
     }),
     TypeOrmModule.forRoot({
@@ -33,6 +35,7 @@ import { Task } from './tasks/entities/task.entity';
     UsersModule,
     BoardsModule,
     TasksModule,
+    LoginModule,
   ],
   controllers: [AppController],
   providers: [AppService],

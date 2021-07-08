@@ -8,8 +8,8 @@ export class Task {
   @Column()
   title: string;
 
-  @Column()
-  order = 1;
+  @Column({ default: 1 })
+  order: number;
 
   @Column()
   description: string;
