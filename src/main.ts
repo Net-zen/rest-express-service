@@ -7,6 +7,9 @@ import { join } from 'path';
 import { getRepository } from 'typeorm';
 import { User } from './users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { AllExceptionsFilter } from './filters/all-exceptions.filter';
+import { Logger } from '@nestjs/common';
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
 
 async function createAdmin() {
   const admin = {
@@ -30,11 +33,16 @@ async function createAdmin() {
 async function bootstrap() {
   const PORT = parseInt(process.env.PORT) || 4000;
   const app = await NestFactory.create(AppModule);
+  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalFilters(new AllExceptionsFilter());
   const swaggerDocument = yaml.load(
     readFileSync(join(__dirname, '../doc/api.yaml'), 'utf-8'),
   ) as OpenAPIObject;
   SwaggerModule.setup('/doc', app, swaggerDocument);
   await app.listen(PORT);
   await createAdmin();
+  return PORT;
 }
-bootstrap();
+bootstrap().then((PORT) =>
+  Logger.log(`App is running on http://localhost:${PORT}`),
+);
