@@ -1,4 +1,8 @@
 import { NestFactory } from '@nestjs/core';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import { OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import * as yaml from 'js-yaml';
@@ -31,8 +35,15 @@ async function createAdmin() {
 }
 
 async function bootstrap() {
+  const fastify = process.env.USE_FASTIFY === 'true';
   const PORT = parseInt(process.env.PORT) || 4000;
-  const app = await NestFactory.create(AppModule);
+  let app = await NestFactory.create(AppModule);
+  if (fastify) {
+    app = await NestFactory.create<NestFastifyApplication>(
+      AppModule,
+      new FastifyAdapter(),
+    );
+  }
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalFilters(new AllExceptionsFilter());
   const swaggerDocument = yaml.load(

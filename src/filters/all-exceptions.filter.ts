@@ -12,12 +12,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse();
+
     const req = ctx.getRequest();
     const { method, protocol, originalUrl: url } = req;
     const query = JSON.stringify(req.query);
-    const body = JSON.stringify(
-      req.body.password ? { ...req.body, password: '******' } : req.body,
-    );
+    let body = '';
+    if (req.body) {
+      body = JSON.stringify(
+        req.body.password ? { ...req.body, password: '******' } : req.body,
+      );
+    }
     const status =
       exception instanceof HttpException
         ? exception.getStatus()
@@ -27,11 +31,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
           query={${query}}
           body={${body}}`,
     );
-    res.status(status).json({
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: req.url,
-    });
+    if (process.env.USE_FASTIFY === 'true') {
+      res.status(status).send(exception);
+    } else {
+      res.status(status).json({
+        statusCode: status,
+        timestamp: new Date().toISOString(),
+        path: req.url,
+      });
+    }
+
     if (exception instanceof Error && !(exception instanceof HttpException)) {
       Logger.error(`message: ${exception.message}
       stack trace: ${exception.stack}`);

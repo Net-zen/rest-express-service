@@ -14,15 +14,19 @@ export class LoggingInterceptor implements NestInterceptor {
     const now = Date.now();
     const req = context.switchToHttp().getRequest();
 
-    const { method, protocol, originalUrl: url } = req;
+    const { method, protocol } = req;
+    const url = process.env.USE_FASTIFY === 'true' ? req.url : req.originalUrl;
     const query = JSON.stringify(req.query);
 
     return next.handle().pipe(
       tap(() => {
         const res = context.switchToHttp().getResponse();
-        const body = JSON.stringify(
-          req.body.password ? { ...req.body, password: '******' } : req.body,
-        );
+        let body = '';
+        if (req.body) {
+          body = JSON.stringify(
+            req.body.password ? { ...req.body, password: '******' } : req.body,
+          );
+        }
         const status = res.statusCode;
         const delay = Date.now() - now;
         Logger.log(

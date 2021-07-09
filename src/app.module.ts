@@ -31,6 +31,7 @@ import { LoginModule } from './login/login.module';
       cli: {
         migrationsDir: './src/migrations',
       },
+      keepConnectionAlive: true,
     }),
     UsersModule,
     BoardsModule,
