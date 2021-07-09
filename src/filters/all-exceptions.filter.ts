@@ -18,7 +18,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const body = JSON.stringify(
       req.body.password ? { ...req.body, password: '******' } : req.body,
     );
-
     const status =
       exception instanceof HttpException
         ? exception.getStatus()
@@ -28,11 +27,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
           query={${query}}
           body={${body}}`,
     );
-
     res.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: req.url,
     });
+    if (exception instanceof Error && !(exception instanceof HttpException)) {
+      Logger.error(`message: ${exception.message}
+      stack trace: ${exception.stack}`);
+    }
   }
 }
