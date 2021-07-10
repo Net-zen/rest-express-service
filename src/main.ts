@@ -37,12 +37,14 @@ async function createAdmin() {
 async function bootstrap() {
   const fastify = process.env.USE_FASTIFY === 'true';
   const PORT = parseInt(process.env.PORT) || 4000;
-  let app = await NestFactory.create(AppModule);
+  let app;
   if (fastify) {
     app = await NestFactory.create<NestFastifyApplication>(
       AppModule,
       new FastifyAdapter(),
     );
+  } else {
+    app = await NestFactory.create(AppModule);
   }
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalFilters(new AllExceptionsFilter());
