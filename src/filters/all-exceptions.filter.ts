@@ -22,19 +22,19 @@ export class AllExceptionsFilter implements ExceptionFilter {
         req.body.password ? { ...req.body, password: '******' } : req.body,
       );
     }
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    let status: number;
+    let message = '';
+    if (exception instanceof HttpException) {
+      message = exception.message;
+      status = exception.getStatus();
+    } else {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
     Logger.error(
       `${protocol} | ${status} | [${method}] | ${req.ip} | ${url}
           query={${query}}
           body={${body}}`,
     );
-    let message = '';
-    if (exception instanceof HttpException) {
-      message = exception.message;
-    }
     if (process.env.USE_FASTIFY === 'true') {
       res.status(status).send(exception);
     } else {
