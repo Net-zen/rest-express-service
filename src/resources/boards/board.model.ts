@@ -13,3 +13,4 @@ export class Board {
   columns!: string;
 }
 
+export type BoardDto = Omit<Board, 'id'>;

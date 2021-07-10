@@ -32,4 +32,30 @@ class BAD_REQUEST extends Error implements IcustomError  {
   }
 }
 
-export { NOT_FOUND, BAD_REQUEST, IcustomError };
+class FORBIDDEN extends Error implements IcustomError  {
+
+  status: number;
+
+  message: string;
+
+  constructor(message: string = ReasonPhrases.FORBIDDEN) {
+    super(message);
+    this.status = StatusCodes.FORBIDDEN;
+    this.message = message;
+  }
+}
+
+class UNAUTHORIZED extends Error implements IcustomError  {
+
+  status: number;
+
+  message: string;
+
+  constructor(message: string = ReasonPhrases.UNAUTHORIZED) {
+    super(message);
+    this.status = StatusCodes.UNAUTHORIZED;
+    this.message = message;
+  }
+}
+
+export { NOT_FOUND, BAD_REQUEST, UNAUTHORIZED, FORBIDDEN, IcustomError };

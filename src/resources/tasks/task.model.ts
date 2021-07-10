@@ -25,3 +25,4 @@ export class Task {
   columnId!: string;
 }
 
+export type TaskDto = Omit<Task, 'id'>;
