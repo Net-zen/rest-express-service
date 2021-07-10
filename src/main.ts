@@ -50,7 +50,11 @@ async function bootstrap() {
     readFileSync(join(__dirname, '../doc/api.yaml'), 'utf-8'),
   ) as OpenAPIObject;
   SwaggerModule.setup('/doc', app, swaggerDocument);
-  await app.listen(PORT);
+  if (fastify) {
+    await app.listen(PORT, '0.0.0.0');
+  } else {
+    await app.listen(PORT);
+  }
   await createAdmin();
   return PORT;
 }

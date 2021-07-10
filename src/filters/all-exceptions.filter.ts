@@ -31,11 +31,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
           query={${query}}
           body={${body}}`,
     );
+    let message = '';
+    if (exception instanceof HttpException) {
+      message = exception.message;
+    }
     if (process.env.USE_FASTIFY === 'true') {
       res.status(status).send(exception);
     } else {
       res.status(status).json({
         statusCode: status,
+        message: message,
         timestamp: new Date().toISOString(),
         path: req.url,
       });
