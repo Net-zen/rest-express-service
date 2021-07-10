@@ -6,7 +6,6 @@ config:
     - duration: 300
       arrivalRate: 10
       maxVusers: 50
-
 before:
   flow:
     - log: "Get auth token"
@@ -52,7 +51,6 @@ scenarios:
             authorization: "Bearer {{ token }}"
           json:
             name: "test_updated"
-            login: "test_updated"
             password: "test_updated"
           expect:
             - statusCode: 200
