@@ -9,7 +9,6 @@ services:
       - postgres
     command: sh -c './wait-for postgres:5432 -t 600 -- npm run start:dev'
     volumes:
-    - ./logs:/usr/src/app/logs
     - ./src:/usr/src/app/src
     environment:
       PORT: ${PORT}
