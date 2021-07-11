@@ -12,7 +12,7 @@ import { getRepository } from 'typeorm';
 import { User } from './users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { AllExceptionsFilter } from './filters/all-exceptions.filter';
-import { Logger } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 
 async function createAdmin() {
@@ -37,7 +37,7 @@ async function createAdmin() {
 async function bootstrap() {
   const fastify = process.env.USE_FASTIFY === 'true';
   const PORT = parseInt(process.env.PORT) || 4000;
-  let app;
+  let app: INestApplication;
   if (fastify) {
     app = await NestFactory.create<NestFastifyApplication>(
       AppModule,
