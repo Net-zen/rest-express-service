@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UserDto } from './dto/user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Task } from '../tasks/entities/task.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +15,7 @@ export class UsersService {
     @InjectRepository(Task)
     private tasksRepository: Repository<Task>,
   ) {}
-  async create(user: UserDto): Promise<User> {
+  async create(user: CreateUserDto): Promise<User> {
     const existUser = await this.getByLogin(user.login);
     if (existUser) {
       throw new HttpException(
@@ -50,7 +51,7 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, user: UserDto) {
+  async update(id: string, user: UpdateUserDto) {
     const res = await this.usersRepository.findOne(id);
     if (typeof res === 'undefined') {
       throw new HttpException(
