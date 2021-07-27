@@ -14,7 +14,6 @@ import * as bcrypt from 'bcrypt';
 import { AllExceptionsFilter } from './filters/all-exceptions.filter';
 import { INestApplication, Logger } from '@nestjs/common';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
-// import { ValidationPipe } from './pipes/validation.pipe';
 
 async function createAdmin() {
   const admin = {
@@ -49,7 +48,6 @@ async function bootstrap() {
   }
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalFilters(new AllExceptionsFilter());
-  // app.useGlobalPipes(new ValidationPipe());
   const swaggerDocument = yaml.load(
     readFileSync(join(__dirname, '../doc/api.yaml'), 'utf-8'),
   ) as OpenAPIObject;

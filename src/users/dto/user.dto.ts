@@ -5,8 +5,8 @@ export class UserDto {
   login: string;
 
   @IsString({ message: 'Have to be string' })
-  @Length(6, 25, {
-    message: 'Net less then 6 symbols, and not more then 25 symbols',
+  @Length(5, 25, {
+    message: 'Net less then 5 symbols, and not more then 25 symbols',
   })
   password: string;
 }
