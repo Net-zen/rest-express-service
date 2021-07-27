@@ -4,4 +4,4 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN chmod 777 ./wait-for
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "run", "start" ]
