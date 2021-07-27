@@ -6,6 +6,7 @@ import { ValidationPipe } from '../pipes/validation.pipe';
 @Controller('login')
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
+  @UsePipes(ValidationPipe)
   @Post()
   login(@Body() user: UserDto) {
     return this.loginService.login(user);
