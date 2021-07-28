@@ -3,11 +3,11 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class Board {
   @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  id: string;
 
   @Column()
-  title!: string;
+  title: string;
 
   @Column('json', { nullable: true })
-  columns!: string;
+  columns: string;
 }
